@@ -8,21 +8,25 @@
 class Browser
 {
     /**
-     * @var View
-     */
-    private $view;
-
-    /**
-     * The constructor of this example class starts the single file application.
+     * Constructor. Finds out what module to use and sets the settings.
      */
     public function __construct()
     {
-        $this->view = new View;
+        $module = !empty($_GET['module']) ? $_GET['module'] : 'Browsing';
+        $moduleFunction = 'module' . ucfirst($module);
 
-        $page = !empty($_GET['page']) ? $_GET['page'] : '1';
-        $this->view->set('page', $page);
+        if (!method_exists($this, $moduleFunction)) {
+            $moduleFunction = 'Browsing';
+        }
 
-        $this->view->render('index');
+        $this->$moduleFunction();
+    }
+
+    private function moduleBrowsing()
+    {
+        $browsing = new Browsing;
+        $browsing
+            ->show();
     }
 }
 

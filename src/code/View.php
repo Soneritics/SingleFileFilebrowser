@@ -28,8 +28,9 @@ class View
     /**
      * Render the view based on a template.
      * @param string $view Template name.
+     * @param bool $layout Show the layout or only the template
      */
-    public function render($view)
+    public function render($view, $layout = true)
     {
         $template = new Template;
         $templateFile = $template->getTemplateFilename($view);
@@ -44,6 +45,20 @@ class View
         include $templateFile;
         $content = ob_get_clean();
 
-        include $template->getTemplateFilename('layout');
+        if ($layout === true) {
+            include $template->getTemplateFilename('layout');
+        } else {
+            echo $content;
+        }
+    }
+
+    /**
+     * Return an HTML safe string.
+     * @param string $html
+     * @return string
+     */
+    private function encode($html)
+    {
+        return htmlspecialchars($html);
     }
 }
