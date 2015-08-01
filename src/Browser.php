@@ -16,7 +16,7 @@ class Browser
         $moduleFunction = 'module' . ucfirst($module);
 
         if (!method_exists($this, $moduleFunction)) {
-            $moduleFunction = 'Browsing';
+            $moduleFunction = 'moduleBrowsing';
         }
 
         $this->$moduleFunction();
@@ -24,8 +24,33 @@ class Browser
 
     private function moduleBrowsing()
     {
+        $currentPath = isset($_GET['currentPath']) ?
+            $_GET['currentPath'] :
+            __DIR__;
+
         $browsing = new Browsing;
         $browsing
+            ->setCurrentPath($currentPath)
+            ->show();
+    }
+
+    private function moduleShellCommand()
+    {
+        $command = $_POST['command'];
+
+        $shellCommand = new ShellCommand;
+        $shellCommand
+            ->setCommand($command)
+            ->show();
+    }
+
+    private function modulePHPEvaluation()
+    {
+        $code = $_POST['code'];
+
+        $phpEvaluation = new PHPEvaluation;
+        $phpEvaluation
+            ->setCode($code)
             ->show();
     }
 }

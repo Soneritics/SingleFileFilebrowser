@@ -12,6 +12,8 @@ class Browsing extends Module
      */
     private $view;
 
+    private $currentPath;
+
     public function __construct()
     {
         $this->view = new View;
@@ -20,5 +22,12 @@ class Browsing extends Module
     public function show()
     {
         $this->view->render('browsing');
+    }
+
+    public function setCurrentPath($path)
+    {
+        $this->currentPath = $path;
+        $this->view->set('title', 'Browsing: ' . $path);
+        return $this;
     }
 }
