@@ -24,8 +24,8 @@ class Browser
 
     private function moduleBrowsing()
     {
-        $currentPath = isset($_GET['currentPath']) ?
-            $_GET['currentPath'] :
+        $currentPath = isset($_GET['path']) ?
+            $_GET['path'] :
             __DIR__;
 
         $browsing = new Browsing;

@@ -3,6 +3,32 @@
         
     }
 
+    #location-bar {
+        height: 50px;
+        line-height: 50px;
+        background-color: #767676;
+        color: #fff;
+        margin-bottom: 15px;
+        list-style: none;
+        margin: 0 0 20px 0;
+        padding: 0 10px;
+    }
+
+    #location-bar > li {
+        float: left;
+        margin-right: 10px;
+    }
+
+    #location-bar > li:last-child {
+        float: right;
+    }
+
+    .locationbar-input input {
+        line-height: 30px;
+        width: 100%;
+        color: #767676;
+    }
+
     .command-line {
         color: #fff;
         background-color: #000;
@@ -32,13 +58,51 @@
         color: #fff;
         margin: 0;
     }
+
+    .error {
+        background-color: #da3b01;
+        color: #fff;
+        padding: 30px;
+        line-height: 50px;
+    }
+
+    .error > em {
+        font-size: 50px;
+        line-height: 50px;
+    }
 </style>
 
 <article>
     <div class="container" id="browser-holder">
         <div class="row">
             <div class="col-xs-12">
-                <p>Location bar</p>
+                <ul id="location-bar">
+                    <li>Location:</li>
+                    <?php foreach (array('/') + explode(DIRECTORY_SEPARATOR, $path) as $directoryPart): ?>
+                        <?php if (isset($firstDirectoryPart) && $firstDirectoryPart > 2): ?>
+                            <li class="locationbar-default">/</li>
+                            <?php $fullPath .= '/' . $directoryPart; ?>
+                        <?php elseif (!isset($firstDirectoryPart)): ?>
+                            <?php $firstDirectoryPart = 1; ?>
+                            <?php $fullPath = ''; ?>
+                        <?php else: ?>
+                            <?php $fullPath .= '/' . $directoryPart; ?>
+                        <?php endif; ?>
+
+                        <li class="locationbar-default">
+                            <a href="?path=<?php echo $this->encode($fullPath); ?>" class="btn btn-default"><?php echo $this->encode($directoryPart); ?></a>
+                        </li>
+
+                        <?php $firstDirectoryPart++; ?>
+                    <?php endforeach; ?>
+                    <li class="locationbar-input" style="display:none;width:75%;">
+                        <form method="get"><input type="text" name="path" value="<?php echo $this->encode($path); ?>"></form>
+                    </li>
+                    <li>
+                        <script>var locationBarDefault=true;</script>
+                        <a href="javascript:;" onclick="locationBarDefault=!locationBarDefault;if(locationBarDefault){$('.locationbar-default').show();$('.locationbar-input').hide();} else {$('.locationbar-default').hide();$('.locationbar-input').show();}" class="btn btn-default"><em class="glyphicon glyphicon-sort"></em></a>
+                    </li>
+                </ul>
             </div>
         </div>
 
@@ -50,7 +114,31 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <p>Browser</p>
+                <?php if (!empty($error)): ?>
+                    <p class="error">
+                        <em class="glyphicpon glyphicon-remove"></em>
+                        <?php echo $this->encode($error); ?>
+                    </p>
+                <?php else: ?>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>Filename</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($files as $file): ?>
+                                <?php if ($file->isDot() === false): ?>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td><pre><?php print_r($file); ?></pre></td>
+                                    </tr>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
             </div>
         </div>
 
