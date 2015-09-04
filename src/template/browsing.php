@@ -129,12 +129,10 @@
                         </thead>
                         <tbody>
                             <?php foreach ($files as $file): ?>
-                                <?php if ($file->isDot() === false): ?>
-                                    <tr>
-                                        <td><input type="checkbox"></td>
-                                        <td><pre><?php print_r($file); ?></pre></td>
-                                    </tr>
-                                <?php endif; ?>
+                                <tr>
+                                    <td><input type="checkbox"></td>
+                                    <td><pre><?php print_r($file); ?></pre></td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>

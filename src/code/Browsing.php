@@ -57,6 +57,6 @@ class Browsing extends Module
 
     private function getDirectoryContents()
     {
-        return new DirectoryIterator($this->currentPath);
+        return new DirectoryList($this->currentPath);
     }
 }
